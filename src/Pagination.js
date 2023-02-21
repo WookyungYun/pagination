@@ -5,11 +5,18 @@ class Pagination{
     }
     setPaginationBtns=(maxPageCnt,currentPageCnt,perPageCnt)=>{
         
-        for(let i=1; i <= maxPageCnt; i++){
+        for(let i=0; i <= maxPageCnt+1; i++){
             
             const button=document.createElement('button')
             button.innerHTML=`${i}`
-            button.addEventListener("click",(e)=>{this.setCurrentPage(e,currentPageCnt,perPageCnt)})
+            if(i==0){
+                button.innerHTML="<<"
+                button.classList.add("arrow")
+            } else if(i==maxPageCnt+1){
+                button.innerHTML=">>"
+                button.classList.add("arrow")
+            }
+            button.addEventListener("click",(e)=>{this.setCurrentPage(e,currentPageCnt,perPageCnt,maxPageCnt)})
             document.querySelector("#number-btns").appendChild(button)
         }
     }
@@ -22,23 +29,41 @@ class Pagination{
         e.target.className="active"
     }
 
-    setCurrentPage=(e,currentPageCnt,perPageCnt)=>{
+    setCurrentPage=(e,currentPageCnt,perPageCnt,maxPageCnt)=>{
         const tbody=document.querySelector("tbody")
         const tr=tbody.querySelectorAll("tr")
+
         const pageNum=e.target.innerHTML
         currentPageCnt=pageNum
         
         this.handleActivePageBtn(e)
-        
         const prevRange=(pageNum-1)*perPageCnt 
         const currentRange=pageNum*perPageCnt  
-        
-        tr.forEach((item,index)=>{
-            item.classList.add("hidden");
-            if(index>=prevRange&&index<currentRange){
-                item.classList.remove("hidden")
-            }
-        })
+        if(e.target.innerText=="<<"){
+            tr.forEach((item,index)=>{
+                item.classList.add("hidden")
+                if(index>=0&&index<5){
+                    item.classList.remove("hidden")
+                }
+            })
+        } else if(e.target.innerText==">>"){
+            tr.forEach((item,index)=>{
+                item.classList.add("hidden")
+                const prevRange=(maxPageCnt-1)*perPageCnt
+                const currentRange=prevRange*perPageCnt
+                if(index>=prevRange&&index<currentRange){
+                    item.classList.remove("hidden")
+                }
+            })
+        }
+        else if(e.target.innerHTML<=maxPageCnt){
+            tr.forEach((item,index)=>{
+                item.classList.add("hidden");
+                if(index>=prevRange&&index<currentRange){
+                    item.classList.remove("hidden")
+                }
+            })
+        }
     }
  
    
