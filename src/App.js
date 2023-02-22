@@ -1,4 +1,4 @@
-import Dropdown from "./Dropdown";
+import Dropdown from "/src/Dropdown.js";
 import Pagination from "/src/Pagination.js";
 import Table from "/src/Table.js";
 
